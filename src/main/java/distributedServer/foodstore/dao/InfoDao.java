@@ -15,6 +15,4 @@ public interface InfoDao {
 	Info update(Info entity);
 	
 	void delete(Info entity);
-	
-	void deleteById(long entityId);
 }
