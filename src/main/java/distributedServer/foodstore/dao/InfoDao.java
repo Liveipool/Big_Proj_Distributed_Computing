@@ -6,7 +6,7 @@ import distributedServer.foodstore.model.Info;
 
 public interface InfoDao {
 	
-	Info findOne(long id);
+	Info findOne(String name);
 	
 	List<Info> findAll();
 	
@@ -17,5 +17,4 @@ public interface InfoDao {
 	void delete(Info entity);
 	
 	void deleteById(long entityId);
-
 }

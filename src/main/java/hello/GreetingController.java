@@ -29,6 +29,21 @@ public class GreetingController {
 	
 	@RequestMapping("/")
     public String Mainpage() {
-        return "hi";
+        return "index";
     }
+	
+	@RequestMapping("/signup")
+	public void signup() {
+		
+	}
+	
+	@RequestMapping("/signin")
+	public void signin() {
+		
+	}
+	
+	@RequestMapping("/pay")
+	public void pay() {
+		
+	}
 }
