@@ -1,11 +1,16 @@
 package hello;
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import distributedServer.foodstore.config.databaseConfig;
+import distributedServer.foodstore.model.Info;
+import distributedServer.foodstore.service.InfoService;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -19,19 +24,24 @@ public class GreetingController {
     public String greeting(@RequestParam(value="name", required=false, defaultValue="World") String name, Model model) {
         model.addAttribute("name", name);
         return "greeting";
-    }
+    }*/
 
-	@RequestMapping("/hello")
+	/*@RequestMapping("/hello")
     public void sayHello(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.getWriter().println("<h1>Hello ,!!!!</h1>");
-        response.getWriter().println("session=" + request.getSession(true).getId());
+        response.setStatus(HttpServletResponse.SC_CONFLICT);
+        //response.getWriter().println("<h1>Hello ,!!!!</h1>");
+        //response.getWriter().println("session=" + request.getSession(true).getId());
     }*/
 	
 	@RequestMapping("/")
     public String Mainpage() {
         return "index";
+    }
+	
+	@RequestMapping("/home")
+    public String Home() {
+        return "layouts/home";
     }
 	
 	@RequestMapping("/layouts/signup.html")
@@ -40,15 +50,51 @@ public class GreetingController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/signup")
-	public String signup(String inputNameSignup, String inputSexSignup, String inputPhoneSignup, String inputAddressSignup, String inputUsernameSignup, String inputPasswordSignup) {
+	public void signup(String inputNameSignup, String inputSexSignup, String inputPhoneSignup, String inputAddressSignup, String inputUsernameSignup, String inputPasswordSignup, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		System.out.println("name: " + inputNameSignup + "sex: " + inputSexSignup +  "phone: " + inputPhoneSignup + "address: " + inputAddressSignup + "username: " + inputUsernameSignup + "password: " + inputPasswordSignup); 
-		return "layouts/home";
+		AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
+    	ctx.register(databaseConfig.class);
+    	ctx.refresh();
+    	
+    	InfoService fs = ctx.getBean(InfoService.class);
+    	Info temp = fs.findOne(inputUsernameSignup);
+    	if (temp != null) {
+    		response.setStatus(HttpServletResponse.SC_CONFLICT);
+    		return;
+    	}
+    	Info info = new Info(inputNameSignup);
+    	info.setaddress(inputAddressSignup);
+    	info.setPass(inputPasswordSignup);
+    	info.setPhone(inputPhoneSignup);
+    	info.setSex(inputSexSignup);
+    	info.setUserName(inputUsernameSignup);
+    	fs.create(info);
+		response.sendRedirect("/home");
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/signin")
-	public String signin(String inputUsernameSignin, String inputPasswordSignin) {
+	public void signin(String inputUsernameSignin, String inputPasswordSignin, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
 		System.out.println(inputPasswordSignin + "   " + inputUsernameSignin); 
-		return "layouts/home";
+		
+		AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
+    	ctx.register(databaseConfig.class);
+    	ctx.refresh();
+    	
+    	InfoService fs = ctx.getBean(InfoService.class);
+    	Info temp = fs.findOne(inputUsernameSignin);
+    	if (temp != null) {
+    		System.out.println(temp.getPass());
+    		if (temp.getPass().equals(inputPasswordSignin)) {
+    			response.sendRedirect("/home");
+    		} else {
+    			response.setStatus(HttpServletResponse.SC_CONFLICT);
+    			System.out.println("ok....");
+    		}
+    	} else {
+    		response.setStatus(HttpServletResponse.SC_CONFLICT);
+    		System.out.println("ok....2");
+    	}
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/pay")

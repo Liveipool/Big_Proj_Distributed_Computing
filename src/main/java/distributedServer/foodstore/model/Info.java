@@ -33,10 +33,6 @@ public class Info implements Serializable{
 	}
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID")
-	private long id;
-	
 	@Column(name = "Username")
 	private String username;
 	
