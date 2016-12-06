@@ -9,5 +9,5 @@
 >后台使用J2EE+thymeleaf+spring+jetty+maven.      
 
 ### 作者   
-关伟杰 ！[https://github.com/SSSKJ](https://github.com/SSSKJ)   
-李为 ![https://github.com/Liveipool](https://github.com/Liveipool)    
+关伟杰 [https://github.com/SSSKJ](https://github.com/SSSKJ)   
+李为 [https://github.com/Liveipool](https://github.com/Liveipool)    
