@@ -18,25 +18,27 @@ $(document).ready(function() {
 		var us = validator.isUsernameValid(username);
 		var ps = validator.isPasswordValid(password);
 		if (!na) {
-			$("#signupErrorMessage").text(validator.form.name.errorMessage);
-			event.preventDefault();			
+			$("#signupErrorMessage").text(validator.form.name.errorMessage);	
 		} else if (!se) {
 			$("#signupErrorMessage").text(validator.form.sex.errorMessage);
-			event.preventDefault();
 		} else if (!ph) {
 			$("#signupErrorMessage").text(validator.form.phone.errorMessage);
-			event.preventDefault();
 		} else if (!ad) {
 			$("#signupErrorMessage").text(validator.form.address.errorMessage);
-			event.preventDefault();
 		} else if (!us) {
 			$("#signupErrorMessage").text(validator.form.username.errorMessage);
-			event.preventDefault();
 		} else if (!ps) {
 			$("#signupErrorMessage").text(validator.form.password.errorMessage);
-			event.preventDefault();
 		} else {
-			$("#signupErrorMessage").text("");
+			$.post("/signup", {inputNameSignup: name, inputSexSignup: sex, inputPhoneSignup: phone, inputAddressSignup: address, inputUsernameSignup: username, inputPasswordSignup: password})
+				.done(function(data) {
+					$("#signupErrorMessage").text("");
+					alert("登录成功");
+					window.location = "/home";
+				})
+				.fail(function(data) {
+					$("#signupErrorMessage").text("用户名已被使用");
+				});
 		}  
 	});
 });

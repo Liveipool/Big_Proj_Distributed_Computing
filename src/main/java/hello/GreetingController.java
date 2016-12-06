@@ -35,7 +35,8 @@ public class GreetingController {
     }*/
 	
 	@RequestMapping("/")
-    public String Mainpage() {
+    public String Mainpage(HttpServletRequest request, HttpServletResponse response) {
+    	response.setContentType("text/html;charset=UTF-8");
         return "index";
     }
 	
@@ -51,7 +52,7 @@ public class GreetingController {
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/signup")
 	public void signup(String inputNameSignup, String inputSexSignup, String inputPhoneSignup, String inputAddressSignup, String inputUsernameSignup, String inputPasswordSignup, HttpServletRequest request, HttpServletResponse response) throws IOException {
-		System.out.println("name: " + inputNameSignup + "sex: " + inputSexSignup +  "phone: " + inputPhoneSignup + "address: " + inputAddressSignup + "username: " + inputUsernameSignup + "password: " + inputPasswordSignup); 
+		System.out.println("name: " + inputNameSignup + " sex: " + inputSexSignup +  " phone: " + inputPhoneSignup + " address: " + inputAddressSignup + " username: " + inputUsernameSignup + " password: " + inputPasswordSignup); 
 		AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
     	ctx.register(databaseConfig.class);
     	ctx.refresh();
